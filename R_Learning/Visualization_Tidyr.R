@@ -92,10 +92,3 @@ View(surveys_common)
 write.csv(surveys_common,file="surveys_complete.csv")
 
 
-# Data Visualization with ggplot2
-library(ggplot2)
-
-surveys_complete <- read.csv("surveys_complete.csv")
-
-ggplot(data=surveys_complete,
-       mapping = aes(x=weight,y=hindfoot_length))+geom_point()
