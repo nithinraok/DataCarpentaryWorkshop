@@ -5,4 +5,34 @@ Species and sex are in same column
 Tools Used
 1. Excel
 2. OpenRefine
-3. 
+3.
+
+
+SQL:
+
+SELECT *
+FROM surveys
+LIMIT 10;
+
+SELECT  DISTINCT species_id, DISTINCT year
+FROM surveys;
+
+SELECT  DISTINCT species_id, year, month,day,weight/1000
+FROM surveys;
+
+SELECT  year,month,day,weight*1e3
+FROM surveys;
+SELECT *
+FROM surveys
+WHERE (weight !='') AND (hindfoot_length!='') AND (sex!='') AND (species_id = 'DM')
+
+
+SELECT day,month,year,species_id,weight/1000
+FROM surveys
+WHERE (plot_id=1) AND (weight /1000> 0.075)
+
+SELECT day,month,year,species_id,weight
+FROM surveys
+WHERE (plot_id=1) AND (species_id IN ('DS','NL'))
+ORDER BY weight ASC;
+--This is comment
