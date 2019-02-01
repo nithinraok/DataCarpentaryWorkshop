@@ -36,3 +36,66 @@ View(surveys %>% mutate(weight_kg=weight/1000))
 surveys %>% filter(!is.na(weight)) %>% 
     mutate(weight_kg=weight/1000) %>% 
     head()
+
+surveys %>% group_by(sex) %>% 
+         summarize(mean_weight=mean(weight,na.rm=TRUE))
+
+# Sort by column
+
+surveys %>% arrange(desc(weight)) %>% head() ## desc for descending 
+
+surveys %>% group_by(sex) %>% 
+    summarize(count=n())
+
+surveys %>% 
+    count(sex,sort=TRUE)
+
+# Reshaping data
+
+surveys_gw <- surveys %>% 
+    filter(!is.na(weight)) %>% 
+    group_by(genus,plot_id) %>% 
+    summarize(mean_weight=mean(weight))
+
+View(surveys_gw)
+
+surveys_spread <- surveys_gw %>% 
+    spread(key=genus, value = mean_weight)
+
+View(surveys_spread)
+
+##Gather back again
+
+surveys_gather<- surveys_spread %>% 
+    gather(key = genus,value = mean_weight,-plot_id)
+
+View(surveys_gather)
+
+
+# Exporting data
+
+surveys_complete <- surveys %>% 
+    filter(!is.na(hindfoot_length),
+           !is.na(weight),
+           !is.na(sex))
+
+species_counts <- surveys_complete %>% 
+    count(species_id) %>% 
+    filter(n>=50)
+
+surveys_common <- surveys_complete %>% 
+    filter(species_id %in% species_counts$species_id)
+
+View(species_counts)
+View(surveys_common)    
+
+write.csv(surveys_common,file="surveys_complete.csv")
+
+
+# Data Visualization with ggplot2
+library(ggplot2)
+
+surveys_complete <- read.csv("surveys_complete.csv")
+
+ggplot(data=surveys_complete,
+       mapping = aes(x=weight,y=hindfoot_length))+geom_point()
